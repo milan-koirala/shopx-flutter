@@ -27,8 +27,8 @@ class CartPage extends StatelessWidget {
               // pop dialog box
               Navigator.pop(context);
 
-              // add to cart
-              context.read<Shop>().addToCart(product);
+              // remove from cart
+              context.read<Shop>().removeFromCart(product);
             },
             child: Text("Yes"),
           ),
