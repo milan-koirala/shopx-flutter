@@ -6,34 +6,35 @@ class Shop extends ChangeNotifier {
   final List<Product> _shop = [
     // 1st product
     Product(
-      name: "Product 1",
-      price: 999,
-      description: "This is the first product",
-      // imagePath: imagePath
+      name: "Apple Iphone 14 4GB 256GB",
+      price: 150000,
+      description: "Powerful phone with a great display and plenty of storage.",
+      
+      imagePath: "assets/iphone14.jpeg",
     ),
 
     // 2nd product
     Product(
-      name: "Product 2",
-      price: 1299,
-      description: "This is the second product",
-      // imagePath: imagePath
+      name: "Smart Watch 2",
+      price: 4999,
+      description: "Stay connected and track your fitness with Smart Watch 2.",
+      imagePath: "assets/digitalwatch.jpg",
     ),
 
     // 3rd product
     Product(
-      name: "Product 3",
-      price: 1299,
-      description: "This is the third product",
-      // imagePath: imagePath
+      name: "Realme Phone Original Charger",
+      price: 1599,
+      description: "Fast and reliable charging with the original Realme adapter.",
+      imagePath: "assets/mobilecharger.jpeg",
     ),
 
     // 4th product
     Product(
-      name: "Product 4",
-      price: 1299,
-      description: "This is the fourth product",
-      // imagePath: imagePath
+      name: "Apple HeadSet 2025",
+      price: 25999,
+      description: "Enjoy clear sound and comfortable fit, perfect for calls and music.",
+      imagePath: "assets/headphone.jpg",
     ),
   ];
 
