@@ -22,7 +22,8 @@ class ShopPage extends StatelessWidget {
           // go to cart button
           IconButton(
             onPressed: () => Navigator.pushNamed(context, "/cart_page"),
-            icon: const Icon(Icons.shopping_cart_outlined))
+            icon: const Icon(Icons.shopping_cart_outlined),
+          ),
         ],
       ),
       drawer: const MyDrawer(),
@@ -36,14 +37,14 @@ class ShopPage extends StatelessWidget {
             child: Text(
               "Pick from a selected list of premium products",
               style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary
+                color: Theme.of(context).colorScheme.inversePrimary,
               ),
             ),
           ),
 
           // product list
           SizedBox(
-            height: 550,
+            height: 650,
             child: ListView.builder(
               itemCount: products.length,
               scrollDirection: Axis.horizontal,
