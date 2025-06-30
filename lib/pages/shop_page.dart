@@ -9,7 +9,6 @@ class ShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // acess products in shop
     final products = context.watch<Shop>().shop;
 
     return Scaffold(
@@ -19,7 +18,6 @@ class ShopPage extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Shop Page"),
         actions: [
-          // go to cart button
           IconButton(
             onPressed: () => Navigator.pushNamed(context, "/cart_page"),
             icon: const Icon(Icons.shopping_cart_outlined),
@@ -30,19 +28,42 @@ class ShopPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: ListView(
         children: [
+          const SizedBox(height: 10),
+
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                prefixIcon: const Icon(Icons.search),
+                contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                filled: true,
+                fillColor: Colors.grey.shade200,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+
           const SizedBox(height: 25),
 
-          // shop subtitle
+          // Subtitle
           Center(
             child: Text(
               "Pick from a selected list of premium products",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
+                fontSize: 16,
               ),
             ),
           ),
 
-          // product list
+          const SizedBox(height: 15),
+
+          // Product List
           SizedBox(
             height: 650,
             child: ListView.builder(
@@ -50,10 +71,7 @@ class ShopPage extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.all(10),
               itemBuilder: (context, index) {
-                // get each individual product from shop
                 final product = products[index];
-
-                // return as a product tile UI
                 return MyProductTile(product: product);
               },
             ),
