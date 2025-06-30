@@ -6,47 +6,76 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // logo
-            Icon(
-              Icons.shopping_bag,
-              size: 72,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
+      backgroundColor: colorScheme.background,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
 
-            const SizedBox(height: 25),
-
-            // title
-            const Text(
-              "Shopx",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+              // Animated logo
+              Icon(
+                Icons.shopping_bag_rounded,
+                size: 100,
+                color: colorScheme.primary,
               ),
-            ),
 
-            const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
-            // subtitle
-            Text(
-              "Premium Quality Products",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
+              // App title
+              const Text(
+                "ShopX",
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
               ),
-            ),
 
-            const SizedBox(height: 25),
+              const SizedBox(height: 10),
 
-            // button
-            MyButton(
-              onTap: () => Navigator.pushNamed(context, "/shop_page"),
-              child: Icon(Icons.arrow_forward))
-          ],
+              // App subtitle
+              Text(
+                "Premium Quality Products",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: colorScheme.inversePrimary,
+                  letterSpacing: 0.5,
+                ),
+              ),
+
+              const Spacer(),
+
+              // Continue button
+              SizedBox(
+                width: double.infinity,
+                child: MyButton(
+                  onTap: () => Navigator.pushNamed(context, "/shop_page"),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Get Started",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Icon(Icons.arrow_forward),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
