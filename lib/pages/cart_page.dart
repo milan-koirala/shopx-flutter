@@ -7,112 +7,143 @@ import 'package:shopx_flutter/models/shop.dart';
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
-  // method of remove item from cart
+  // remove item from cart
   void removeItemFromCart(BuildContext context, Product product) {
-    // show to dialog box to ask user to confirm to remove item from cart
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         content: const Text("Remove this item from your cart?"),
         actions: [
-          // cancel button
           MaterialButton(
             onPressed: () => Navigator.pop(context),
             child: const Text("Cancel"),
           ),
-
-          // yes button
           MaterialButton(
             onPressed: () {
-              // pop dialog box
               Navigator.pop(context);
-
-              // remove from cart
               context.read<Shop>().removeFromCart(product);
             },
-            child: Text("Yes"),
+            child: const Text("Yes"),
           ),
         ],
       ),
     );
   }
 
-  // user pressed the pay button
+  // increase quantity
+  void increaseQuantity(BuildContext context, Product product) {
+    product.quantity++;
+    context.read<Shop>().notifyListeners();
+  }
+
+  // decrease quantity
+  void decreaseQuantity(BuildContext context, Product product) {
+    if (product.quantity > 1) {
+      product.quantity--;
+      context.read<Shop>().notifyListeners();
+    } else {
+      // remove if quantity hits 1 and user taps '-'
+      removeItemFromCart(context, product);
+    }
+  }
+
+  // pay button
   void payButtonPressed(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => const AlertDialog(
-        content: Text(
-          "User want to pay! Connect this app to your payment backend",
-        ),
+        content: Text("User wants to pay! Connect this app to your payment backend."),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // get access to the cart
     final cart = context.watch<Shop>().cart;
+
+    final total = cart.fold<double>(
+      0,
+      (sum, item) => sum + (item.price * item.quantity),
+    );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Cart Page"),
+        title: const Text("Cart Page"),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
-          // card list
+          // cart list
           Expanded(
             child: cart.isEmpty
-                ? Center(child: Text("Your cart is empty.."))
+                ? const Center(child: Text("Your cart is empty.."))
                 : ListView.builder(
                     itemCount: cart.length,
                     itemBuilder: (context, index) {
-                      // get individual item in cart
                       final item = cart[index];
 
-                      // return as a cart tile UI
                       return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 1,
-                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: SizedBox(
+                          child: Image.asset(
+                            item.imagePath,
                             width: 50,
                             height: 50,
-                            child: Padding(
-                              padding: const EdgeInsets.all(
-                                4,
-                              ),
-                              child: Image.asset(
-                                item.imagePath,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
+                            fit: BoxFit.contain,
                           ),
                         ),
                         title: Text(item.name),
-                        subtitle: Text("Rs. ${item.price.toStringAsFixed(2)}"),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.remove_circle_outline),
-                          onPressed: () => removeItemFromCart(context, item),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Unit: Rs. ${item.price.toStringAsFixed(2)}"),
+                            Text("Total: Rs. ${(item.price * item.quantity).toStringAsFixed(2)}"),
+                          ],
+                        ),
+                        trailing: Column(
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove_circle_outline),
+                                  onPressed: () => decreaseQuantity(context, item),
+                                ),
+                                Text(item.quantity.toString(),
+                                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                                IconButton(
+                                  icon: const Icon(Icons.add_circle_outline),
+                                  onPressed: () => increaseQuantity(context, item),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       );
                     },
                   ),
           ),
 
+          // grand total
+          if (cart.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                "Grand Total: Rs. ${total.toStringAsFixed(2)}",
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+
           // pay button
           Padding(
-            padding: const EdgeInsets.all(50.0),
+            padding: const EdgeInsets.all(30.0),
             child: MyButton(
               onTap: () => payButtonPressed(context),
-              child: Text("PAY NOW"),
+              child: const Text("PAY NOW"),
             ),
           ),
         ],
