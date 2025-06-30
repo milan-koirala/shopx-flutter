@@ -9,7 +9,7 @@ class Shop extends ChangeNotifier {
       name: "Apple Iphone 14 4GB 256GB",
       price: 150000,
       description: "Powerful phone with a great display and plenty of storage.",
-      
+
       imagePath: "assets/iphone14.jpeg",
     ),
 
@@ -25,7 +25,8 @@ class Shop extends ChangeNotifier {
     Product(
       name: "Realme Phone Original Charger",
       price: 1599,
-      description: "Fast and reliable charging with the original Realme adapter.",
+      description:
+          "Fast and reliable charging with the original Realme adapter.",
       imagePath: "assets/mobilecharger.jpeg",
     ),
 
@@ -33,7 +34,8 @@ class Shop extends ChangeNotifier {
     Product(
       name: "Apple HeadSet 2025",
       price: 25999,
-      description: "Enjoy clear sound and comfortable fit, perfect for calls and music.",
+      description:
+          "Enjoy clear sound and comfortable fit, perfect for calls and music.",
       imagePath: "assets/headphone.jpg",
     ),
   ];
@@ -48,14 +50,31 @@ class Shop extends ChangeNotifier {
   List<Product> get cart => _cart;
 
   // add item to cart
-  void addToCart(Product item) {
-    _cart.add(item);
+  void addToCart(Product product) {
+    final index = _cart.indexWhere((item) => item.name == product.name);
+
+    if (index != -1) {
+      // Already in cart → increase quantity
+      _cart[index].quantity += 1;
+    } else {
+      // Not in cart → add with quantity = 1
+      _cart.add(product.copyWithQuantity(1));
+    }
+
     notifyListeners();
   }
 
   // remove item from cart
-  void removeFromCart(Product item) {
-    _cart.remove(item);
-    notifyListeners();
+  void removeFromCart(Product product) {
+    final index = _cart.indexWhere((item) => item.name == product.name);
+
+    if (index != -1) {
+      if (_cart[index].quantity > 1) {
+        _cart[index].quantity -= 1;
+      } else {
+        _cart.removeAt(index);
+      }
+      notifyListeners();
+    }
   }
 }
