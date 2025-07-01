@@ -3,6 +3,7 @@ import 'package:shopx_flutter/models/product.dart';
 
 class Shop extends ChangeNotifier {
   // products for sale
+  final List<Product> _selectedForCheckout = [];
   final List<Product> _shop = [
     // 1st product
     Product(
@@ -98,5 +99,28 @@ class Shop extends ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  // store user-selected products for checkout
+  List<Product> get selectedForCheckout => _selectedForCheckout;
+
+  // Add or remove a product from the selected checkout list
+  // - If [isSelected] is true, adds the product (if not already present)
+  // - If false, removes it from the selection
+  void toggleProductSelection(Product product, bool isSelected) {
+    if (isSelected) {
+      if (!_selectedForCheckout.contains(product)) {
+        _selectedForCheckout.add(product);
+      }
+    } else {
+      _selectedForCheckout.remove(product);
+    }
+    notifyListeners();
+  }
+
+  // Clears all selected items after a successful checkout
+  void clearSelectedForCheckout() {
+    _selectedForCheckout.clear();
+    notifyListeners();
   }
 }
