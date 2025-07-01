@@ -1,21 +1,17 @@
-<<<<<<< HEAD
-# shopx_flutter
+# 🛍️ ShopX - Flutter eCommerce App
 
-A new Flutter project.
+ShopX is a beautifully designed, lightweight eCommerce mobile application built with **Flutter**, featuring product listing, cart management, checkout, and theme customization. It offers a clean and modern UI/UX experience inspired by real-world mobile shopping apps.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🛒 Product Catalog with images, descriptions, and prices  
+- 🔍 Search Bar with dynamic filtering  
+- 🧺 Add to Cart & Quantity Adjustments (+/-)  
+- ✅ Product selection via checkbox for selective checkout  
+- 💵 Checkout with multiple payment options  
+- 🌙 Light/Dark Mode with theme toggle  
+- 🧭 Navigation Drawer for easy routing  
+- 🎨 Custom reusable widgets for maintainability
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# shopx-flutter
-ShopX is a modern Flutter eCommerce app with product listing, cart functionality, and built-in dark mode.
->>>>>>> 0d8ddf99819bd894ec885e8a147f4fc72183e9e5
