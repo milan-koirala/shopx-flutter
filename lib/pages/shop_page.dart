@@ -4,12 +4,26 @@ import 'package:shopx_flutter/components/my_drawer.dart';
 import 'package:shopx_flutter/components/my_product_tile.dart';
 import 'package:shopx_flutter/models/shop.dart';
 
-class ShopPage extends StatelessWidget {
+class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
+
+  @override
+  State<ShopPage> createState() => _ShopPageState();
+}
+
+class _ShopPageState extends State<ShopPage> {
+  String searchQuery = "";
 
   @override
   Widget build(BuildContext context) {
     final products = context.watch<Shop>().shop;
+
+    // Filter products based on search
+    final filteredProducts = products.where((product) {
+      final nameLower = product.name.toLowerCase();
+      final queryLower = searchQuery.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -34,6 +48,11 @@ class ShopPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
               decoration: InputDecoration(
                 hintText: 'Search products...',
                 prefixIcon: const Icon(Icons.search),
@@ -66,15 +85,17 @@ class ShopPage extends StatelessWidget {
           // Product List
           SizedBox(
             height: 650,
-            child: ListView.builder(
-              itemCount: products.length,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(10),
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return MyProductTile(product: product);
-              },
-            ),
+            child: filteredProducts.isEmpty
+                ? const Center(child: Text("No products found."))
+                : ListView.builder(
+                    itemCount: filteredProducts.length,
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.all(10),
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      return MyProductTile(product: product);
+                    },
+                  ),
           ),
         ],
       ),
