@@ -7,7 +7,7 @@ import 'package:shopx_flutter/models/shop.dart';
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
-  // remove item from cart
+  // remove item from cart with confirmation
   void removeItemFromCart(BuildContext context, Product product) {
     showDialog(
       context: context,
@@ -32,22 +32,21 @@ class CartPage extends StatelessWidget {
 
   // increase quantity
   void increaseQuantity(BuildContext context, Product product) {
-    product.quantity++;
-    context.read<Shop>().notifyListeners();
+    context.read<Shop>().increaseQuantity(product);
   }
 
   // decrease quantity
   void decreaseQuantity(BuildContext context, Product product) {
-    if (product.quantity > 1) {
-      product.quantity--;
-      context.read<Shop>().notifyListeners();
+    final currentQuantity = product.quantity;
+    if (currentQuantity > 1) {
+      context.read<Shop>().decreaseQuantity(product);
     } else {
-      // remove if quantity hits 1 and user taps '-'
+      // confirm removal when quantity is 1
       removeItemFromCart(context, product);
     }
   }
 
-  // pay button
+  // pay button action
   void payButtonPressed(BuildContext context) {
     showDialog(
       context: context,
@@ -104,22 +103,20 @@ class CartPage extends StatelessWidget {
                             Text("Total: Rs. ${(item.price * item.quantity).toStringAsFixed(2)}"),
                           ],
                         ),
-                        trailing: Column(
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove_circle_outline),
-                                  onPressed: () => decreaseQuantity(context, item),
-                                ),
-                                Text(item.quantity.toString(),
-                                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                                IconButton(
-                                  icon: const Icon(Icons.add_circle_outline),
-                                  onPressed: () => increaseQuantity(context, item),
-                                ),
-                              ],
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              onPressed: () => decreaseQuantity(context, item),
+                            ),
+                            Text(
+                              item.quantity.toString(),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              onPressed: () => increaseQuantity(context, item),
                             ),
                           ],
                         ),
