@@ -77,4 +77,26 @@ class Shop extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // increase quantity of a product in cart
+  void increaseQuantity(Product product) {
+    final index = _cart.indexWhere((item) => item.name == product.name);
+    if (index != -1) {
+      _cart[index].quantity++;
+      notifyListeners();
+    }
+  }
+
+  // decrease quantity of a product in cart
+  void decreaseQuantity(Product product) {
+    final index = _cart.indexWhere((item) => item.name == product.name);
+    if (index != -1) {
+      if (_cart[index].quantity > 1) {
+        _cart[index].quantity--;
+      } else {
+        _cart.removeAt(index);
+      }
+      notifyListeners();
+    }
+  }
 }
