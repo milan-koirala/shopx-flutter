@@ -4,6 +4,7 @@ import 'package:shopx_flutter/models/shop.dart';
 import 'package:shopx_flutter/pages/cart_page.dart';
 import 'package:shopx_flutter/pages/checkout_page.dart';
 import 'package:shopx_flutter/pages/intro_page.dart';
+import 'package:shopx_flutter/pages/languages_page.dart';
 import 'package:shopx_flutter/pages/settings_page.dart';
 import 'package:shopx_flutter/pages/shop_page.dart';
 import 'package:shopx_flutter/themes/theme_provider.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         "/cart_page": (context) => const CartPage(),
         "/setting_page": (context) => SettingsPage(),
         "/checkout_page": (context) => const CheckoutPage(),
+        "/language_page": (context) => const LanguagesPage(),
       },
     );
   }
