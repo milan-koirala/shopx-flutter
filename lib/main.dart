@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopx_flutter/models/product.dart';
 import 'package:shopx_flutter/models/shop.dart';
 import 'package:shopx_flutter/pages/cart_page.dart';
 import 'package:shopx_flutter/pages/checkout_page.dart';
 import 'package:shopx_flutter/pages/intro_page.dart';
 import 'package:shopx_flutter/pages/languages_page.dart';
+import 'package:shopx_flutter/pages/product_details_page.dart';
 import 'package:shopx_flutter/pages/settings_page.dart';
 import 'package:shopx_flutter/pages/shop_page.dart';
+import 'package:shopx_flutter/pages/wishlist_page.dart';
 import 'package:shopx_flutter/themes/theme_provider.dart';
 
 void main() {
@@ -37,6 +40,10 @@ class MyApp extends StatelessWidget {
         "/setting_page": (context) => SettingsPage(),
         "/checkout_page": (context) => const CheckoutPage(),
         "/language_page": (context) => const LanguagesPage(),
+        "/wishlist_page": (context) => const WishlistPage(),
+        "/product_details": (context) => ProductDetailsPage(
+          product: ModalRoute.of(context)!.settings.arguments as Product,
+        ),
       },
     );
   }
