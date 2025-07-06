@@ -58,6 +58,19 @@ class MyDrawer extends StatelessWidget {
                   Navigator.pushNamed(context, "/setting_page");
                 },
               ),
+
+              //cart tile
+              MyListTile(
+                text: "Wishlist",
+                icon: Icons.favorite,
+                onTap: () {
+                  // pop drawer first
+                  Navigator.pop(context);
+
+                  // go to wishlist page
+                  Navigator.pushNamed(context, "/wishlist_page");
+                },
+              ),
             ],
           ),
 
@@ -67,7 +80,11 @@ class MyDrawer extends StatelessWidget {
             child: MyListTile(
               text: "Exit",
               icon: Icons.logout,
-              onTap: () => Navigator.pushNamedAndRemoveUntil(context, "/intro_page", (route) => false),
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context,
+                "/intro_page",
+                (route) => false,
+              ),
             ),
           ),
         ],
