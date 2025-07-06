@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopx_flutter/components/my_drawer.dart';
-import 'package:shopx_flutter/components/my_product_tile.dart';
+import 'package:shopx_flutter/models/product.dart';
 import 'package:shopx_flutter/models/shop.dart';
+import 'package:shopx_flutter/pages/product_details_page.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -18,7 +19,6 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     final products = context.watch<Shop>().shop;
 
-    // Filter products based on search
     final filteredProducts = products.where((product) {
       final nameLower = product.name.toLowerCase();
       final queryLower = searchQuery.toLowerCase();
@@ -30,17 +30,17 @@ class _ShopPageState extends State<ShopPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Shop Page"),
+        title: const Text("ShopX"),
         actions: [
           IconButton(
-            onPressed: () => Navigator.pushNamed(context, "/cart_page"),
-            icon: const Icon(Icons.shopping_cart_outlined),
+            onPressed: () => Navigator.pushNamed(context, "/wishlist_page"),
+            icon: const Icon(Icons.favorite_border),
           ),
         ],
       ),
       drawer: const MyDrawer(),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: ListView(
+      body: Column(
         children: [
           const SizedBox(height: 10),
 
@@ -56,7 +56,6 @@ class _ShopPageState extends State<ShopPage> {
               decoration: InputDecoration(
                 hintText: 'Search products...',
                 prefixIcon: const Icon(Icons.search),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 filled: true,
                 fillColor: Colors.grey.shade200,
                 border: OutlineInputBorder(
@@ -67,37 +66,112 @@ class _ShopPageState extends State<ShopPage> {
             ),
           ),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
 
-          // Subtitle
-          Center(
-            child: Text(
-              "Pick from a selected list of premium products",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                fontSize: 16,
-              ),
+          // Grid View of Products
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: filteredProducts.isEmpty
+                  ? const Center(child: Text("No products found."))
+                  : GridView.builder(
+                      itemCount: filteredProducts.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: 0.7,
+                          ),
+                      itemBuilder: (context, index) {
+                        final product = filteredProducts[index];
+                        return _buildProductCard(context, product);
+                      },
+                    ),
             ),
           ),
+        ],
+      ),
+    );
+  }
 
-          const SizedBox(height: 15),
-
-          // Product List
-          SizedBox(
-            height: 650,
-            child: filteredProducts.isEmpty
-                ? const Center(child: Text("No products found."))
-                : ListView.builder(
-                    itemCount: filteredProducts.length,
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.all(10),
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      return MyProductTile(product: product);
+  Widget _buildProductCard(BuildContext context, Product product) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProductDetailsPage(product: product),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image + Heart Icon
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: Image.asset(
+                    product.imagePath,
+                    width: double.infinity,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: IconButton(
+                    icon: const Icon(Icons.favorite_border),
+                    color: Colors.redAccent,
+                    onPressed: () {
+                      Provider.of<Shop>(
+                        context,
+                        listen: false,
+                      ).toggleWishlist(product);
                     },
                   ),
-          ),
-        ],
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+                  Text(
+                    "Rs. ${product.price.toStringAsFixed(2)}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
