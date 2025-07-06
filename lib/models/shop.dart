@@ -4,6 +4,7 @@ import 'package:shopx_flutter/models/product.dart';
 class Shop extends ChangeNotifier {
   // products for sale
   final List<Product> _selectedForCheckout = [];
+  final List<Product> _wishlist = [];
   final List<Product> _shop = [
     // 1st product
     Product(
@@ -49,6 +50,9 @@ class Shop extends ChangeNotifier {
 
   // get user cart
   List<Product> get cart => _cart;
+
+  // get wishlist
+  List<Product> get wishlist => _wishlist;
 
   // add item to cart
   void addToCart(Product product) {
@@ -122,5 +126,20 @@ class Shop extends ChangeNotifier {
   void clearSelectedForCheckout() {
     _selectedForCheckout.clear();
     notifyListeners();
+  }
+
+  // Wishlist logic
+  void toggleWishlist(Product product) {
+    final exists = _wishlist.any((item) => item.name == product.name);
+    if (exists) {
+      _wishlist.removeWhere((item) => item.name == product.name);
+    } else {
+      _wishlist.add(product);
+    }
+    notifyListeners();
+  }
+
+  bool isInWishlist(Product product) {
+    return _wishlist.any((item) => item.name == product.name);
   }
 }
